@@ -5,7 +5,7 @@ const {updateFile} = require("../utils")
 
 function task() {
     updateFile('start/routes.ts', (data) => {
-        const templateRoute = fs.readFileSync(join(__dirname, 'templates', 'routes.ts'), 'utf8')
+        const templateRoute = fs.readFileSync(join(__dirname, 'templates', 'start_routes.ts.txt'), 'utf8')
         return data.replace(
             "import Route from '@ioc:Adonis/Core/Route'",
             "import Route from '@ioc:Adonis/Core/Route'\nimport HealthCheck from '@ioc:Adonis/Core/HealthCheck'"
