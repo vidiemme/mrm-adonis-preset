@@ -1,0 +1,17 @@
+{
+  "aliases": {
+    "setup": [
+      "init",
+      "all"
+    ],
+    "all": [
+      "apm",
+      "docker",
+      "healthcheck",
+      "logger",
+      "scheduler",
+      "service_repository",
+      "validator"
+    ]
+  }
+}

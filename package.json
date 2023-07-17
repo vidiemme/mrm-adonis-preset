@@ -1,0 +1,36 @@
+{
+  "name": "@vidiemme/mrm-adonis-preset",
+  "version": "1.0.0",
+  "description": "Common tasks for Adonis projects in Vidiemme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/vidiemme/mrm-adonis-preset.git"
+  },
+  "scripts": {
+    "test": "node logger/index.js"
+  },
+  "author": "Vidiemme",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vidiemme/mrm-adonis-preset/-/issues"
+  },
+  "homepage": "https://github.com/vidiemme/mrm-adonis-preset",
+  "engines": {
+    "node": ">=4"
+  },
+  "main": "config.json",
+  "files": [
+    "config.json",
+    "*/index.js",
+    "*/templates/*"
+  ],
+  "keywords": [
+    "mrm",
+    "mrm-preset"
+  ],
+  "dependencies": {
+    "inquirer": "^9.2.8",
+    "mrm-core": "^7.1.6",
+    "path": "^0.12.7"
+  }
+}
