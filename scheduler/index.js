@@ -3,11 +3,9 @@ const { exec } = require('node:child_process')
 
 function task () {
     install('@vidiemme/adonis-scheduler', { dev: false })
-    exec('node ace configure @vidiemme/adonis-scheduler', (error, stdout, stderr) => {
-        if (error) {
-            console.error(`exec error: ${error}`)
-        }
-    })
+
+    const child = exec("node ace configure @vidiemme/adonis-scheduler")
+    child.stdin.write('\n')
 }
 
 task.description = 'TODO'
