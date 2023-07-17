@@ -1,7 +1,6 @@
 {
   "aliases": {
     "setup": [
-      "init",
       "all"
     ],
     "all": [
