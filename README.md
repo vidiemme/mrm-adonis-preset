@@ -17,7 +17,8 @@ following implemented features:
 
 ## Use
 
-To use Vidiemme Adonis Preset simply run the following command `npx mrm all --preset @vidiemme/mrm-adonis-preset".
+To use Vidiemme Adonis Preset simply run the following command:\
+`npx mrm all --preset @vidiemme/mrm-adonis-preset`.
 
 ## Contributions
 
