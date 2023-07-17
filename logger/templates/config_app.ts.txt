@@ -1,0 +1,17 @@
+    prettyPrint: Env.get('LOG_PRETTY_PRINT', false) ? { hideObject: true } : false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Basic information added to all logs
+    |--------------------------------------------------------------------------
+    |
+    | In addition to the process PID and hostname,
+    | the client name, project name and environment are always added.
+    |
+    */
+    base: {
+        customer: Env.get('CUSTOMER_NAME'),
+        app: Env.get('PROJECT_NAME'),
+        environment: Env.get('NODE_ENV'),
+        pid: process.pid,
+    },

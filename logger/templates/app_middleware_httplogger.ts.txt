@@ -1,0 +1,55 @@
+import onFinished from 'on-finished'
+
+import { string } from '@ioc:Adonis/Core/Helpers'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+/**
+ * This middleware adds the route name to the APM transaction.
+ *
+ * @category Middleware
+ * @hideconstructor
+ */
+class HttpLogger {
+  /**
+   *
+   * @param {RequestContract} request
+   * @param {ResponseContract} response
+   * @param {AuthContract} auth
+   * @param {LoggerContract} logger
+   * @param {() => Promise<void>} next
+   * @returns {Promise<void>}
+   */
+  public async handle(
+      { request, response, logger }: HttpContextContract,
+      next: () => Promise<void>
+  ) {
+    const start = process.hrtime()
+    const url = request.url()
+    const method = request.method()
+
+    onFinished(response.response, (error) => {
+      const diff = process.hrtime(start)
+      const milliseconds = string.prettyMs((diff[0] * 1e9 + diff[1]) / 1e6)
+      const statusCode = response.response.statusCode
+      const meta = {
+        ip: request.ip(),
+        language: request.languages().join(),
+        userAgent: request.header('User-Agent'),
+        authorization: request.header('Authorization'),
+        method,
+        statusCode,
+        url,
+        params: request.params(),
+        query: request.qs(),
+        payload: request.body(),
+        milliseconds,
+        error,
+      }
+      logger.info(meta, '%s %s %s %s', method, url, statusCode, milliseconds)
+    })
+
+    await next()
+  }
+}
+
+export default HttpLogger
