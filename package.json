@@ -1,6 +1,6 @@
 {
   "name": "@vidiemme/mrm-adonis-preset",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common tasks for Adonis projects in Vidiemme",
   "repository": {
     "type": "git",
