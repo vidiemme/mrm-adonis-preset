@@ -1,0 +1,59 @@
+import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import { ResourceRouteNames, RouteMiddlewareHandler } from '@ioc:Adonis/Core/Route'
+
+const getMiddlewareValidator = (validatorName: string): RouteMiddlewareHandler => {
+  return async ({ request }, next) => {
+    if (!validatorName) {
+      throw new Error('Validator name is required')
+    }
+
+    const { default: Validator } = await import('../app/Validators/' + validatorName)
+    if (!Validator) {
+      throw new Error('Missing validator for ' + validatorName)
+    }
+
+    request.sanitizeData = await new Validator(request).validate()
+
+    await next()
+  }
+}
+
+export default class RouteValidatorProvider {
+  public static needsApplication = true
+
+  constructor(protected app: ApplicationContract) {}
+
+  public async boot() {
+    // Register your own bindings
+    const Route = this.app.container.use('Adonis/Core/Route')
+
+    Route.Route.macro('validate', function (validatorName: string) {
+      this.middleware(getMiddlewareValidator(validatorName))
+      return this
+    })
+
+    Route.RouteResource.macro(
+        'validate',
+        function (
+            validator: {
+              [P in ResourceRouteNames]?: string
+            } & {
+              '*'?: string
+            }
+        ) {
+          for (let name in validator) {
+            if (name === '*') {
+              this.routes.forEach((one) => one.middleware(getMiddlewareValidator(validator[name])))
+            } else {
+              const route = this.routes.find((one) => one.name.endsWith(name))
+              /* istanbul ignore else */
+              if (route) {
+                route.middleware(getMiddlewareValidator(validator[name]))
+              }
+            }
+          }
+          return this
+        }
+    )
+  }
+}

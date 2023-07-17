@@ -1,0 +1,71 @@
+import {
+  validator,
+  ParsedTypedSchema,
+  ErrorReporterConstructorContract,
+} from '@ioc:Adonis/Core/Validator'
+import { RequestContract } from '@ioc:Adonis/Core/Request'
+
+export default abstract class Validator {
+  protected constructor(protected request: RequestContract) {}
+
+  /**
+   * Object for schemas.
+   * Each key in object will correspond to a type of validation.
+   * Each values will be a valid Adonis schema, made using schema.create
+   */
+  protected abstract schemas: ParsedTypedSchema<any>
+
+  /**
+   * Object of error message objects used to pass custom error messages.
+   * Each key will correspond to a valid validation type defined in schemas
+   */
+  protected messages = {}
+
+  /**
+   * Cache key, to be used if validator schema caching is needed.
+   * Refer https://preview.adonisjs.com/guides/validator/schema-caching
+   */
+  protected cacheKey: string
+
+  /**
+   * Bail mode means stop validation on the first error itself
+   */
+  protected bail: boolean
+
+  /**
+   * PreConversion function to remap the input data as desired.
+   */
+  protected async preprocess(data: { [key: string]: any }): Promise<{ [key: string]: any }> {
+    return data
+  }
+
+  /**
+   * PostConversion function to remap the input data as desired.
+   */
+  protected postprocess(data: { [key: string]: any }): { [key: string]: any } {
+    return data
+  }
+
+  public async validate(
+      reporter: ErrorReporterConstructorContract = validator.reporters.vanilla
+  ): Promise<any> {
+    // Preprocess data before request validation.
+    const preprocessedData = await this.preprocess({
+      ...this.request.all(),
+      ...this.request.allFiles(),
+    })
+
+    // Check that the data comply with the rules, an exception is automatically thrown.
+    const sanitizeData = await this.request.validate({
+      schema: this.schemas,
+      data: preprocessedData,
+      messages: this.messages,
+      cacheKey: this.cacheKey,
+      bail: this.bail,
+      reporter: reporter,
+    })
+
+    // I merge the two datasets, this way no post-validation changes are lost (e.g. trim function)
+    return this.postprocess({ ...preprocessedData, ...sanitizeData })
+  }
+}

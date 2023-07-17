@@ -1,0 +1,17 @@
+declare module '@ioc:Adonis/Core/Route' {
+  import { ResourceRouteNames } from '@ioc:Adonis/Core/Route'
+
+  interface RouteContract {
+    validate(validatorName: string): this
+  }
+
+  interface RouteResourceContract {
+    validate(
+        validators: {
+          [P in ResourceRouteNames]?: string
+        } & {
+          '*'?: string
+        }
+    ): this
+  }
+}
