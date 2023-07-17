@@ -31,5 +31,9 @@
   "dependencies": {
     "mrm-core": "^7.1.6",
     "path": "^0.12.7"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
