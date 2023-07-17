@@ -1,0 +1,13 @@
+require('dotenv').config()
+
+import { AgentConfigOptions } from 'elastic-apm-node'
+
+export const APMConfig: AgentConfigOptions = {
+    // la configurazione attuale per utilizzare l'APM Server di VDM è la seguente
+    active: process.env.ELASTIC_APM_ACTIVE === 'true',
+    environment: process.env.NODE_ENV,
+    serviceName: process.env.ELASTIC_APM_SERVICE_NAME,
+    serverUrl: process.env.ELASTIC_APM_SERVER_URL,
+    secretToken: process.env.ELASTIC_APM_SECRET_TOKEN,
+    verifyServerCert: process.env.ELASTIC_APM_VERIFY_SERVER_CERT === 'true',
+}

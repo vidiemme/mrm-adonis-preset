@@ -1,0 +1,10 @@
+import apm from 'elastic-apm-node'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+export default class ExceptionHandler extends HttpExceptionHandler {
+
+    public handle(error: any, ctx: HttpContextContract): Promise<any> {
+        apm.captureError(error)
+        return super.handle(error, ctx)
+    }
+

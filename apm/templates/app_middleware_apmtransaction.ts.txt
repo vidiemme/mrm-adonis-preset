@@ -1,0 +1,28 @@
+import apm from 'elastic-apm-node'
+
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Route from '@ioc:Adonis/Core/Route'
+
+/**
+ * This middleware adds the route name to the APM transaction.
+ *
+ * @category Middleware
+ * @hideconstructor
+ */
+class ApmTransaction {
+  /**
+   *
+   * @param {RequestContract} request
+   * @param {() => Promise<void>} next
+   * @returns {Promise<void>}
+   */
+  public async handle({ request }: HttpContextContract, next: () => Promise<void>) {
+    const match = Route.match(request.url(), request.method())
+    if (match && apm.isStarted()) {
+      apm.setTransactionName(match.routeKey)
+    }
+    await next()
+  }
+}
+
+export default ApmTransaction

@@ -1,0 +1,16 @@
+export const logger: LoggerConfig = {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logger formatter
+    |--------------------------------------------------------------------------
+    |
+    | Dynamically adds values to the log.
+    | APM traces are always added
+    |
+    */
+    formatters: {
+        log: (logger) => {
+            return { ...logger, ...apm.currentTraceIds }
+        },
+    },
